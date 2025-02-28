@@ -8,106 +8,131 @@ spec:
   owner: owner@company.com
   type: service
   parameters:
-  - title: Fill in some steps
-    ui:order:
-      - multipleChoicesList
-      - listofServices
-      - s3AttributesValues
-      - dbAttributesValues
+    - title: Fill in some steps
+      ui:order:
+        - multipleChoicesList
+        - listofServices
+        -  s3AttributesValues
+        - dbAttributesValues
 
-    properties:   
-      multipleChoicesList:
-        type: array
-        title: A multiple choices list
-        items:
+      properties:   
+        multipleChoicesList:
+          type: array
+          title: A multiple choices list
+          items:
+            type: string
+            enum:
+              - S3
+              - DynamoDB
+          uniqueItems: true
+
+        listofServices:
+          description: Choose the Use Dead Letter Queues from the below drop down.
           type: string
           enum:
             - S3
             - DynamoDB
-        uniqueItems: true
 
-      listofServices:
-        description: Choose the Use Dead Letter Queues from the below drop down.
-        type: string
-        enum:
-          - S3
-          - DynamoDB
-
-    dependencies:
-      multipleChoicesList:
-        oneOf:
-          - if:
-              properties:
-                multipleChoicesList:
-                  contains:
-                    const: S3
-            then:
-              properties:
-                s3AttributesValues:
-                  type: array
-                  title: S3 Attributes
-                  items:
-                    $ref: '#/s3/s3attributes'
+      dependencies:
+        multipleChoicesList:
+          oneOf:
+            - if:
+                properties:
+                  multipleChoicesList:
+                    contains:
+                      const: S3
+              then:
+                properties:
+                  s3AttributesValues:
+                    type: array
+                    title: S3 Attributes
+                    items:
+                      $ref: '#/s3/s3attributes'
           
-          - if:
-              properties:
-                multipleChoicesList:
-                  contains:
-                    const: DynamoDB
-            then:
-              properties:
-                dbAttributesValues:
-                  type: array
-                  title: DynamoDB Attributes
-                  items:
-                    $ref: '#/dynamodb/dbattributes'
+            - if:
+                properties:
+                  multipleChoicesList:
+                    contains:
+                      const: DynamoDB
+              then:
+                properties:
+                  dbAttributesValues:
+                    type: array
+                    title: DynamoDB Attributes
+                    items:
+                      $ref: '#/dynamodb/dbattributes'
 
-        allOf:
-          - if:
-              properties:
-                multipleChoicesList:
-                  contains:
-                    const: S3
-          - if:
-              properties:
-                multipleChoicesList:
-                  contains:
-                    const: DynamoDB
-            then:
-              properties:
-                s3AttributesValues:
-                  type: array
-                  title: S3 Attributes
-                  items:
-                    $ref: '#/s3/s3attributes'
+          allOf:
+            - if:
+                properties:
+                  multipleChoicesList:
+                    contains:
+                      const: S3
+            - if:
+                properties:
+                  multipleChoicesList:
+                    contains:
+                      const: DynamoDB
+              then:
+                properties:
+                  s3AttributesValues:
+                    type: array
+                    title: S3 Attributes
+                    items:
+                      $ref: '#/s3/s3attributes'
 
-                dbAttributesValues:
-                  type: array
-                  title: DynamoDB Attributes
-                  items:
-                    $ref: '#/dynamodb/dbattributes'
+                  dbAttributesValues:
+                    type: array
+                    title: DynamoDB Attributes
+                    items:
+                      $ref: '#/dynamodb/dbattributes'
 
-    s3:
-      s3attributes:
-        type: object
-        properties:
-          name:
-            type: string
-            default: Default S3 name 1
-          name2:
-            type: string
-            default: Default S3 name 2
+      s3:
+        s3attributes:
+          type: object
+          properties:
+            name:
+              type: string
+              default: Default S3 name 1
+            name2:
+              type: string
+              default: Default S3 name 2
 
-    dynamodb:
-      dbattributes:
-        type: object
-        properties:
-          name:
-            type: string
-            default: Default DB name 1
-          name2:
-            type: string
-            default: Default DB name 2
+      dynamodb:
+        dbattributes:
+          type: object
+          properties:
+            name:
+              type: string
+              default: Default DB name 1
+            name2:
+              type: string
+              default: Default DB name 2
+
+              
+              
+
+      s3:
+        s3attributes:
+          type: object
+          properties:
+            name:
+              type: string
+              default: Default S3 name 1
+            name2:
+              type: string
+              default: Default S3 name 2
+
+      dynamodb:
+        dbattributes:
+          type: object
+          properties:
+            name:
+              type: string
+              default: Default DB name 1
+            name2:
+              type: string
+              default: Default DB name 2
 
 steps:
   - action: debug:log
