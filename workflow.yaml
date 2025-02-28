@@ -1,0 +1,68 @@
+spec:
+  owner: khushi.sharma@harness.io
+  type: service
+  parameters:
+    - title: Infrastructure Provisioning ABC
+      type: object
+      required:
+        - environment_type
+        - owner
+      properties:
+        owner:
+          title: Choose an Owner for the Service
+          type: string
+          ui:field: OwnerPicker
+          ui:options:
+            allowedKinds:
+              - Group
+        # This field is hidden but needed to authenticate the request to trigger the pipeline
+        token:
+          title: Harness Token
+          type: string
+          ui:widget: password
+          ui:field: HarnessAuthToken
+        environment_type:
+            title: environment_type
+            type: string
+            description: Name of the environment where you want to provision a resource
+            enum:
+              - dev
+              - staging
+              - prod
+        infracomponent:
+            title: infra component
+            type: object
+            properties:
+                resource_type:
+                    title: resource_type
+                    type: string
+                    description: Name of the resource that you want to provision
+                    enum:
+                        - s3
+                        - vpc
+                        - sns
+                        - glue
+                        - sqs
+            required:
+                - resource_type
+            dependencies:
+                resource_type:
+                    oneOf:
+                        - properties:
+                              resource_type:
+                                  enum:
+                                      - s3
+                                      - vpc
+                              Operationtype:
+                                  $ref: "#/myregion/operation"
+      myregion:
+          operation:
+              title: region
+              type: object
+              properties:
+                  ChooseRegion:
+                      type: string
+                      enum:
+                          - Region A
+                          - Region B
+                          - Region C
