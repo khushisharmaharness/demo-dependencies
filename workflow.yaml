@@ -12,7 +12,7 @@ spec:
       ui:order:
         - multipleChoicesList
         - listofServices
-        -  s3AttributesValues
+        - s3AttributesValues
         - dbAttributesValues
 
       properties:   
@@ -47,7 +47,7 @@ spec:
                     type: array
                     title: S3 Attributes
                     items:
-                      $ref: '#/s3/s3attributes'
+                      $ref: '#/definitions/s3/s3attributes'
           
             - if:
                 properties:
@@ -60,7 +60,7 @@ spec:
                     type: array
                     title: DynamoDB Attributes
                     items:
-                      $ref: '#/dynamodb/dbattributes'
+                      $ref: '#/definitions/dynamodb/dbattributes'
 
           allOf:
             - if:
@@ -79,64 +79,40 @@ spec:
                     type: array
                     title: S3 Attributes
                     items:
-                      $ref: '#/s3/s3attributes'
+                      $ref: '#/definitions/s3/s3attributes'
 
                   dbAttributesValues:
                     type: array
                     title: DynamoDB Attributes
                     items:
-                      $ref: '#/dynamodb/dbattributes'
+                      $ref: '#/definitions/dynamodb/dbattributes'
 
-      s3:
-        s3attributes:
-          type: object
-          properties:
-            name:
-              type: string
-              default: Default S3 name 1
-            name2:
-              type: string
-              default: Default S3 name 2
+  definitions:
+    s3:
+      s3attributes:
+        type: object
+        properties:
+          name:
+            type: string
+            default: Default S3 name 1
+          name2:
+            type: string
+            default: Default S3 name 2
 
-      dynamodb:
-        dbattributes:
-          type: object
-          properties:
-            name:
-              type: string
-              default: Default DB name 1
-            name2:
-              type: string
-              default: Default DB name 2
+    dynamodb:
+      dbattributes:
+        type: object
+        properties:
+          name:
+            type: string
+            default: Default DB name 1
+          name2:
+            type: string
+            default: Default DB name 2
 
-              
-              
-
-      s3:
-        s3attributes:
-          type: object
-          properties:
-            name:
-              type: string
-              default: Default S3 name 1
-            name2:
-              type: string
-              default: Default S3 name 2
-
-      dynamodb:
-        dbattributes:
-          type: object
-          properties:
-            name:
-              type: string
-              default: Default DB name 1
-            name2:
-              type: string
-              default: Default DB name 2
-
-steps:
-  - action: debug:log
-    id: debug-pull-request
-    name: Pull Request Created
-    input:
-      message: Hello, Your Pull Request has been created. 
+  steps:
+    - action: debug:log
+      id: debug-pull-request
+      name: Pull Request Created
+      input:
+        message: Hello, Your Pull Request has been created.
