@@ -1,7 +1,7 @@
 apiVersion: scaffolder.backstage.io/v1beta3
 kind: Template
 metadata:
-  name: Infra provisioning test
+  name: infraprovisioning
   title: Pull-Request-Creator
   description: Create a new PR
 spec:
