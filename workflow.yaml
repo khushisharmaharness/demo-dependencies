@@ -7,71 +7,100 @@ metadata:
 spec:
   owner: khushi.sharma@harness.io
   type: service
-  parameters:
-    - title: Infrastructure Provisioning ABC
-      type: object
-      required:
-        - environment_type
-        - owner
-      properties:
-        owner:
-          title: Choose an Owner for the Service
+parameters:
+  - title: Fill in some steps
+    ui:order:
+      - multipleChoicesList
+      - listofServices
+      - s3AttributesValues
+      - dbAttributesValues
+
+    properties:   
+      multipleChoicesList:
+        type: array
+        title: A multiple choices list
+        items:
           type: string
-          ui:field: OwnerPicker
-          ui:options:
-            allowedKinds:
-              - Group
-        # This field is hidden but needed to authenticate the request to trigger the pipeline
-        token:
-          title: Harness Token
-          type: string
-          ui:widget: password
-          ui:field: HarnessAuthToken
-        environment_type:
-            title: environment_type
-            type: string
-            description: Name of the environment where you want to provision a resource
-            enum:
-              - dev
-              - staging
-              - prod
-        infracomponent:
-            title: infra component
-            type: object
-            properties:
-                resource_type:
-                    title: resource_type
-                    type: string
-                    description: Name of the resource that you want to provision
-                    enum:
-                        - s3
-                        - vpc
-                        - sns
-                        - glue
-                        - sqs
-            required:
-                - resource_type
-            dependencies:
-                resource_type:
-                    oneOf:
-                        - properties:
-                              resource_type:
-                                  enum:
-                                      - s3
-                                      - vpc
-                              Operationtype:
-                                  $ref: "#/myregion/operation"
-      myregion:
-          operation:
-              title: region
-              type: object
+          enum:
+            - S3
+            - DynamoDB
+        uniqueItems: true
+
+      listofServices:
+        description: Choose the Use Dead Letter Queues from the below drop down.
+        type: string
+        enum:
+          - S3
+          - DynamoDB
+
+    dependencies:
+      multipleChoicesList:
+        oneOf:
+          - if:
               properties:
-                  ChooseRegion:
-                      type: string
-                      enum:
-                          - Region A
-                          - Region B
-                          - Region C
+                multipleChoicesList:
+                  contains: { const: S3 }
+            then:
+              properties:
+                s3AttributesValues:
+                  type: array
+                  title: S3 Attributes
+                  items:
+                    $ref: '#/s3/s3attributes'
+          
+          - if:
+              properties:
+                multipleChoicesList:
+                  contains: { const: DynamoDB }
+            then:
+              properties:
+                dbAttributesValues:
+                  type: array
+                  title: DynamoDB Attributes
+                  items:
+                    $ref: '#/dynamodb/dbattributes'
+
+          - if:
+              properties:
+                multipleChoicesList:
+                  contains: { const: S3 }
+                  contains: { const: DynamoDB }
+            then:
+              properties:
+                s3AttributesValues:
+                  type: array
+                  title: S3 Attributes
+                  items:
+                    $ref: '#/s3/s3attributes'
+
+                dbAttributesValues:
+                  type: array
+                  title: DynamoDB Attributes
+                  items:
+                    $ref: '#/dynamodb/dbattributes'
+
+    s3:
+      s3attributes:
+        type: object
+        properties:
+          name:
+            type: string
+            default: Default S3 name 1
+          name2:
+            type: string
+            default: Default S3 name 2
+
+    dynamodb:
+      dbattributes:
+        type: object
+        properties:
+          name:
+            type: string
+            default: Default DB name 1
+          name2:
+            type: string
+            default: Default DB name 2
+
 steps:
   - action: debug:log
     id: debug-pull-request
