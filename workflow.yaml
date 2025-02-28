@@ -26,44 +26,12 @@ parameters:
 
     dependencies:
       multipleChoicesList:
-        oneOf:
-          - if:
-              properties:
-                multipleChoicesList:
-                  contains:
-                    const: S3
-            then:
-              properties:
-                s3AttributesValues:
-                  type: array
-                  title: S3 Attributes
-                  items:
-                    $ref: '#/s3/s3attributes'
-          
-          - if:
-              properties:
-                multipleChoicesList:
-                  contains:
-                    const: DynamoDB
-            then:
-              properties:
-                dbAttributesValues:
-                  type: array
-                  title: DynamoDB Attributes
-                  items:
-                    $ref: '#/dynamodb/dbattributes'
-
         allOf:
           - if:
               properties:
                 multipleChoicesList:
                   contains:
                     const: S3
-          - if:
-              properties:
-                multipleChoicesList:
-                  contains:
-                    const: DynamoDB
             then:
               properties:
                 s3AttributesValues:
@@ -72,6 +40,13 @@ parameters:
                   items:
                     $ref: '#/s3/s3attributes'
 
+          - if:
+              properties:
+                multipleChoicesList:
+                  contains:
+                    const: DynamoDB
+            then:
+              properties:
                 dbAttributesValues:
                   type: array
                   title: DynamoDB Attributes
