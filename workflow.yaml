@@ -1,93 +1,75 @@
-apiVersion: scaffolder.backstage.io/v1beta3
-kind: Template
-metadata:
-  name: infraprovisioning
-  title: Infrastructure Provisioning
-  description: A template for provisioning infrastructure
-spec:
-  owner: owner@company.com
-  type: service
-  parameters:
-    - title: Fill in some steps
-      ui:order:
-        - multipleChoicesList
-        - listofServices
-        - s3AttributesValues
-        - dbAttributesValues
+parameters:
+  - title: Fill in some steps
+    ui:order:
+      - multipleChoicesList
+      - listofServices
+      - s3AttributesValues
+      - dbAttributesValues
 
-      properties:   
-        multipleChoicesList:
-          type: array
-          title: A multiple choices list
-          items:
-            type: string
-            enum:
-              - S3
-              - DynamoDB
-          uniqueItems: true
-
-        listofServices:
-          description: Choose the Use Dead Letter Queues from the below drop down.
+    properties:   
+      multipleChoicesList:
+        type: array
+        title: A multiple choices list
+        items:
           type: string
           enum:
             - S3
             - DynamoDB
+        uniqueItems: true
 
-      dependencies:
-        multipleChoicesList:
-          oneOf:
-            - if:
-                properties:
-                  multipleChoicesList:
-                    contains:
-                      const: S3
-              then:
-                properties:
-                  s3AttributesValues:
-                    type: array
-                    title: S3 Attributes
-                    items:
-                      $ref: '#/definitions/s3/s3attributes'
+      listofServices:
+        description: Choose the Use Dead Letter Queues from the below drop down.
+        type: string
+        enum:
+          - S3
+          - DynamoDB
+
+    dependencies:
+      multipleChoicesList:
+        oneOf:
+          - if:
+              properties:
+                multipleChoicesList:
+                  contains: { const: S3 }
+            then:
+              properties:
+                s3AttributesValues:
+                  type: array
+                  title: S3 Attributes
+                  items:
+                    $ref: '#/s3/s3attributes'
           
-            - if:
-                properties:
-                  multipleChoicesList:
-                    contains:
-                      const: DynamoDB
-              then:
-                properties:
-                  dbAttributesValues:
-                    type: array
-                    title: DynamoDB Attributes
-                    items:
-                      $ref: '#/definitions/dynamodb/dbattributes'
+          - if:
+              properties:
+                multipleChoicesList:
+                  contains: { const: DynamoDB }
+            then:
+              properties:
+                dbAttributesValues:
+                  type: array
+                  title: DynamoDB Attributes
+                  items:
+                    $ref: '#/dynamodb/dbattributes'
 
-          allOf:
-            - if:
-                properties:
-                  multipleChoicesList:
-                    contains:
-                      const: S3
-            - if:
-                properties:
-                  multipleChoicesList:
-                    contains:
-                      const: DynamoDB
-              then:
-                properties:
-                  s3AttributesValues:
-                    type: array
-                    title: S3 Attributes
-                    items:
-                      $ref: '#/definitions/s3/s3attributes'
+          - if:
+              properties:
+                multipleChoicesList:
+                  contains: { const: S3 }
+                  contains: { const: DynamoDB }
+            then:
+              properties:
+                s3AttributesValues:
+                  type: array
+                  title: S3 Attributes
+                  items:
+                    $ref: '#/s3/s3attributes'
 
-                  dbAttributesValues:
-                    type: array
-                    title: DynamoDB Attributes
-                    items:
-                      $ref: '#/definitions/dynamodb/dbattributes'
+                dbAttributesValues:
+                  type: array
+                  title: DynamoDB Attributes
+                  items:
+                    $ref: '#/dynamodb/dbattributes'
 
-  definitions:
     s3:
       s3attributes:
         type: object
@@ -109,10 +91,3 @@ spec:
           name2:
             type: string
             default: Default DB name 2
-
-  steps:
-    - action: debug:log
-      id: debug-pull-request
-      name: Pull Request Created
-      input:
-        message: Hello, Your Pull Request has been created.
