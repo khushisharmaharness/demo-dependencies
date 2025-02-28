@@ -2,12 +2,12 @@ apiVersion: scaffolder.backstage.io/v1beta3
 kind: Template
 metadata:
   name: infraprovisioning
-  title: Pull-Request-Creator
-  description: Create a new PR
+  title: Infrastructure Provisioning
+  description: A template for provisioning infrastructure
 spec:
-  owner: khushi.sharma@harness.io
+  owner: owner@company.com
   type: service
-parameters:
+  parameters:
   - title: Fill in some steps
     ui:order:
       - multipleChoicesList
