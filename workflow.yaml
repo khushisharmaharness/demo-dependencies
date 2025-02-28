@@ -1,3 +1,9 @@
+apiVersion: scaffolder.backstage.io/v1beta3
+kind: Template
+metadata:
+  name: Dynamic-Picker-Demo-Pull-Request-Creator
+  title: Pull-Request-Creator
+  description: Create a new PR
 spec:
   owner: khushi.sharma@harness.io
   type: service
