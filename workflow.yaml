@@ -39,7 +39,8 @@ parameters:
           - if:
               properties:
                 multipleChoicesList:
-                  contains: { const: S3 }
+                  contains:
+                    const: S3
             then:
               properties:
                 s3AttributesValues:
@@ -51,7 +52,8 @@ parameters:
           - if:
               properties:
                 multipleChoicesList:
-                  contains: { const: DynamoDB }
+                  contains:
+                    const: DynamoDB
             then:
               properties:
                 dbAttributesValues:
@@ -60,11 +62,17 @@ parameters:
                   items:
                     $ref: '#/dynamodb/dbattributes'
 
+        allOf:
           - if:
               properties:
                 multipleChoicesList:
-                  contains: { const: S3 }
-                  contains: { const: DynamoDB }
+                  contains:
+                    const: S3
+          - if:
+              properties:
+                multipleChoicesList:
+                  contains:
+                    const: DynamoDB
             then:
               properties:
                 s3AttributesValues:
