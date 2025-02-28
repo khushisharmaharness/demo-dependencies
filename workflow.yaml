@@ -72,3 +72,9 @@ spec:
                           - Region A
                           - Region B
                           - Region C
+steps:
+  - action: debug:log
+    id: debug-pull-request
+    name: Pull Request Created
+    input:
+      message: Hello, Your Pull Request has been created. 
